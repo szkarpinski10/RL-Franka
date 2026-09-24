@@ -1,0 +1,110 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Train RlFranka-Stack-Franka with rsl_rl (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "isaaclab",
+            "args": [
+                "train",
+                "--rl_library", "rsl_rl",
+                "--task", "RlFranka-Stack-Franka",
+                "--num_envs", "4096"            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Play RlFranka-Stack-Franka with rsl_rl (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "isaaclab",
+            "args": [
+                "play",
+                "--rl_library", "rsl_rl",
+                "--task", "RlFranka-Stack-Franka",
+                "--num_envs", "32"            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Train RlFranka-Stack-Franka with rl_games (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "isaaclab",
+            "args": [
+                "train",
+                "--rl_library", "rl_games",
+                "--task", "RlFranka-Stack-Franka",
+                "--num_envs", "4096"            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Play RlFranka-Stack-Franka with rl_games (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "isaaclab",
+            "args": [
+                "play",
+                "--rl_library", "rl_games",
+                "--task", "RlFranka-Stack-Franka",
+                "--num_envs", "32"            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Train RlFranka-Stack-Franka with skrl (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "isaaclab",
+            "args": [
+                "train",
+                "--rl_library", "skrl",
+                "--task", "RlFranka-Stack-Franka",
+                "--num_envs", "4096",
+                "--algorithm", "PPO"            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Play RlFranka-Stack-Franka with skrl (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "isaaclab",
+            "args": [
+                "play",
+                "--rl_library", "skrl",
+                "--task", "RlFranka-Stack-Franka",
+                "--num_envs", "32",
+                "--algorithm", "PPO"            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Train RlFranka-Stack-Franka with sb3 (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "isaaclab",
+            "args": [
+                "train",
+                "--rl_library", "sb3",
+                "--task", "RlFranka-Stack-Franka",
+                "--num_envs", "4096"            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Play RlFranka-Stack-Franka with sb3 (PPO)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "isaaclab",
+            "args": [
+                "play",
+                "--rl_library", "sb3",
+                "--task", "RlFranka-Stack-Franka",
+                "--num_envs", "32"            ],
+            "console": "integratedTerminal"
+        },
+    ]
+}
