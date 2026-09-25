@@ -6,6 +6,8 @@
 __all__ = [
     "object_ee_distance",
     "object_is_lifted",
+    "object_grasped",
+    "grasp_reward",
     "ee_frame_pos",
     "ee_frame_quat",
     "gripper_pos",
@@ -16,5 +18,5 @@ __all__ = [
 # Forward stable MDP terms lazily, then override with environment-specific terms below.
 from isaaclab.envs.mdp import *  # noqa: F401, F403
 
-from .rewards import  object_ee_distance, object_is_lifted
+from .rewards import  object_ee_distance, object_is_lifted, grasp_reward, object_grasped
 from .observations import ee_frame_pos, ee_frame_quat, gripper_pos, object_position_in_robot_root_frame

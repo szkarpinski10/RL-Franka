@@ -24,6 +24,7 @@ from isaaclab_ov.physics import OvPhysxCfg
 from isaaclab_physx.physics import PhysxCfg
 from isaaclab.sensors import FrameTransformerCfg
 from isaaclab.sensors.frame_transformer.frame_transformer_cfg import OffsetCfg
+from isaaclab.sensors import ContactSensorCfg
 
 from isaaclab_tasks.utils import PresetCfg
 
@@ -93,6 +94,7 @@ class StackSceneCfg(InteractiveSceneCfg):
     # robot
     robot: ArticulationCfg = FRANKA_PANDA_CFG.replace(
         prim_path = "{ENV_REGEX_NS}/Robot",
+        spawn=FRANKA_PANDA_CFG.spawn.replace(activate_contact_sensors=True),
         init_state = ArticulationCfg.InitialStateCfg(
             joint_pos = _FRANKA_STACK_IK_REL_INIT_JOINT_POS,
             pos = [0.0,0.0,0.55],
@@ -168,6 +170,14 @@ class StackSceneCfg(InteractiveSceneCfg):
                 offset=OffsetCfg(pos=(0.0, 0.0, 0.046)),
             ),
         ]
+    )
+
+    # sensor 
+    ee_sensor = ContactSensorCfg(
+    prim_path="{ENV_REGEX_NS}/Robot/panda_hand",
+    update_period=0.0,
+    history_length=3,
+    debug_vis=False,
     )
 
 
@@ -270,12 +280,26 @@ class RewardsCfg:
         weight=1.0,
     )
 
+    grasp = RewTerm(
+        func=mdp.grasp_reward,
+        params= {"object_cfg": SceneEntityCfg("cube_1"),"ee_frame_cfg": SceneEntityCfg("ee_frame"),"robot_cfg": SceneEntityCfg("robot"),"cube_grasped_reward_val" : 1},
+        weight = 5.0,
+    )
+
     lift = RewTerm(
         func=mdp.object_is_lifted,
         params={"minimal_height": 0.63, "object_cfg": SceneEntityCfg("cube_1")},
         weight=15.0,
     )
     
+    # table_contact_penalty = RewTerm(
+    # func=mdp.undesired_contacts,
+    # params={
+    #     "threshold": 1.0,
+    #     "sensor_cfg": SceneEntityCfg("ee_sensor", body_names="panda_hand"),
+    # },
+    # weight=-5.0,
+    # )
 
 
 @configclass
@@ -290,8 +314,7 @@ class TerminationsCfg:
         params={"minimum_height": 0.52, "asset_cfg": SceneEntityCfg("cube_1")},
     )
 
-    # (3) Cube lifted - success
-    # success = 
+   
 
 
 
