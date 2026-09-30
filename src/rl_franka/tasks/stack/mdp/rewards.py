@@ -91,7 +91,7 @@ def grasp_reward(env: ManagerBasedRLEnv,
     robot_cfg: SceneEntityCfg,
     ee_frame_cfg: SceneEntityCfg,
     object_cfg: SceneEntityCfg,
-    diff_threshold: float = 0.05,
+    diff_threshold: float = 0.03,
 ) -> torch.Tensor:
 
     robot: Articulation = env.scene[robot_cfg.name]

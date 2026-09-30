@@ -264,31 +264,31 @@ class RewardsCfg:
         func=mdp.grasp_reward,
         params= {"object_cfg": SceneEntityCfg("cube_1"),"ee_frame_cfg": SceneEntityCfg("ee_frame"),
                  "robot_cfg": SceneEntityCfg("robot"),},
-        weight = 5.0,
+        weight = 3.5,
     )
 
     lift = RewTerm(
         func=mdp.object_is_lifted,
-        params={"minimal_height": 0.62, "object_cfg": SceneEntityCfg("cube_1")},
+        params={"minimal_height": 0.60, "object_cfg": SceneEntityCfg("cube_1")},
         weight=10.0,
     )
 
     object_goal_tracking_fine_grained = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.05, "minimal_height": 0.62, "command_name": "object_pose"},
+        params={"std": 0.05, "minimal_height": 0.60, "command_name": "object_pose"},
         weight=5.0,
     )
 
     object_goal_tracking = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.3, "minimal_height": 0.62, "command_name": "object_pose", "success_threshold": 0.05},
+        params={"std": 0.3, "minimal_height": 0.60, "command_name": "object_pose", "success_threshold": 0.05},
         weight=16.0,
     )
 
 
     success_reward = RewTerm(
         func = mdp.cube_at_destination,
-        params = {"command_name": "object_pose","height_lift": 0.62,"at_destination_treshold": 0.05,
+        params = {"command_name": "object_pose","height_lift": 0.60,"at_destination_treshold": 0.05,
                   "object_cfg": SceneEntityCfg ("cube_1"),"robot_cfg": SceneEntityCfg("robot"),
                   },
         weight = 30,
@@ -324,7 +324,7 @@ class TerminationsCfg:
         func = mdp.task_success,
         params = {
             "command_name": "object_pose",
-            "height_lift": 0.62,
+            "height_lift": 0.60,
             "at_destination_threshold": 0.05,
         },
     )
@@ -349,11 +349,11 @@ class CurriculumCfg:
     
 
     action_rate = CurrTerm(
-        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -1e-1, "num_steps": 10000}
+        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -1e-2, "num_steps": 100000000}
     )
 
     joint_vel = CurrTerm(
-        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -1e-1, "num_steps": 10000}
+        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -1e-2, "num_steps": 100000000}
     )
 
 #
