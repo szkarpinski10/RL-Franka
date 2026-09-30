@@ -225,30 +225,30 @@ class EventCfg:
     # # reset
     reset_all = EventTerm(func=mdp.reset_scene_to_default, mode="reset")
 
-    # # joints offset 
-    # randomize_franka_joint_state = EventTerm(
-    #     func=mdp.reset_joints_by_offset,
-    #     mode="reset",
-    #     params={
-    #         "position_range": (-0.3, 0.3),
-    #         "velocity_range": (0.0, 0.0),
-    #         "asset_cfg": SceneEntityCfg("robot"),
-    #     },
-    # )
+    # joints offset 
+    randomize_franka_joint_state = EventTerm(
+        func=mdp.reset_joints_by_offset,
+        mode="reset",
+        params={
+            "position_range": (-0.1, 0.1),
+            "velocity_range": (0.0, 0.0),
+            "asset_cfg": SceneEntityCfg("robot"),
+        },
+    )
 
-    # # cube random pos
-    # randomize_cube1_pos = EventTerm(
-    #     func=mdp.reset_root_state_uniform,
-    #     mode="reset",
-    #     params={
-    #         "pose_range": {
-    #             "x": (-0.2, 0.2), "y": (-0.2, 0.2), "z": (0, 0),
-    #             "roll": (0, 0), "pitch": (0, 0), "yaw": (-math.pi, math.pi),
-    #         },
-    #         "velocity_range": {},
-    #         "asset_cfg": SceneEntityCfg("cube_1"),
-    #     },
-    # )
+    # cube random pos
+    randomize_cube1_pos = EventTerm(
+        func=mdp.reset_root_state_uniform,
+        mode="reset",
+        params={
+            "pose_range": {
+                "x": (-0.02, 0.02), "y": (-0.02, 0.02), "z": (0, 0),
+                "roll": (0, 0), "pitch": (0, 0), "yaw": (-math.pi, math.pi),
+            },
+            "velocity_range": {},
+            "asset_cfg": SceneEntityCfg("cube_1"),
+        },
+    )
 
 
 @configclass
@@ -262,7 +262,8 @@ class RewardsCfg:
 
     grasp = RewTerm(
         func=mdp.grasp_reward,
-        params= {"object_cfg": SceneEntityCfg("cube_1"),"ee_frame_cfg": SceneEntityCfg("ee_frame"),"robot_cfg": SceneEntityCfg("robot"),"cube_grasped_reward_val" : 1},
+        params= {"object_cfg": SceneEntityCfg("cube_1"),"ee_frame_cfg": SceneEntityCfg("ee_frame"),
+                 "robot_cfg": SceneEntityCfg("robot"),},
         weight = 5.0,
     )
 
@@ -290,7 +291,7 @@ class RewardsCfg:
         params = {"command_name": "object_pose","height_lift": 0.62,"at_destination_treshold": 0.05,
                   "object_cfg": SceneEntityCfg ("cube_1"),"robot_cfg": SceneEntityCfg("robot"),
                   },
-        weight = 50,
+        weight = 30,
     )
 
 
@@ -318,7 +319,15 @@ class TerminationsCfg:
         func=mdp.root_height_below_minimum,
         params={"minimum_height": 0.52, "asset_cfg": SceneEntityCfg("cube_1")},
     )
-
+    # (3) Success
+    success = DoneTerm(
+        func = mdp.task_success,
+        params = {
+            "command_name": "object_pose",
+            "height_lift": 0.62,
+            "at_desination_threshold": 0.05,
+        },
+    )
    
 @configclass
 class CommandsCfg:
