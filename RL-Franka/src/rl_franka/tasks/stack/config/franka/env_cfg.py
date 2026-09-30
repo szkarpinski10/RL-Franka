@@ -269,23 +269,13 @@ class RewardsCfg:
     lift = RewTerm(
         func=mdp.object_is_lifted,
         params={"minimal_height": 0.63, "object_cfg": SceneEntityCfg("cube_1")},
-        weight=15.0,
+        weight=10.0,
     )
-    
-    # table_contact_penalty = RewTerm(
-    # func=mdp.undesired_contacts,
-    # params={
-    #     "threshold": 1.0,
-    #     "sensor_cfg": SceneEntityCfg("ee_sensor", body_names="panda_hand"),
-    # },
-    # weight=-5.0,
-    # )
-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-1e-4)
 
-    joint_vel = RewTerm(
-        func=mdp.joint_vel_l2,
-        weight=-1e-4,
-        params={"asset_cfg": SceneEntityCfg("robot")},
+    object_goal_tracking_fine_grained = RewTerm(
+        func=mdp.object_goal_distance,
+        params={"std": 0.05, "minimal_height": 0.62, "command_name": "object_pose"},
+        weight=5.0,
     )
 
     object_goal_tracking = RewTerm(
@@ -294,11 +284,27 @@ class RewardsCfg:
         weight=16.0,
     )
 
-    object_goal_tracking_fine_grained = RewTerm(
-        func=mdp.object_goal_distance,
-        params={"std": 0.05, "minimal_height": 0.62, "command_name": "object_pose"},
-        weight=5.0,
+
+    success_reward = RewTerm(
+        func = mdp.cube_at_destination,
+        params = {"command_name": "object_pose","height_lift": 0.62,"at_destination_treshold": 0.05,
+                  "object_cfg": SceneEntityCfg ("cube_1"),"robot_cfg": SceneEntityCfg("robot"),
+                  },
+        weight = 50,
     )
+
+
+
+    # nagordy ujemne za szarpanie 
+    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-1e-4)
+
+    joint_vel = RewTerm(
+        func=mdp.joint_vel_l2,
+        weight=-1e-4,
+        params={"asset_cfg": SceneEntityCfg("robot")},
+    )
+
+  
 
 
 @configclass
