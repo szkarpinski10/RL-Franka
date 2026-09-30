@@ -269,7 +269,7 @@ class RewardsCfg:
 
     lift = RewTerm(
         func=mdp.object_is_lifted,
-        params={"minimal_height": 0.63, "object_cfg": SceneEntityCfg("cube_1")},
+        params={"minimal_height": 0.62, "object_cfg": SceneEntityCfg("cube_1")},
         weight=10.0,
     )
 
@@ -325,7 +325,7 @@ class TerminationsCfg:
         params = {
             "command_name": "object_pose",
             "height_lift": 0.62,
-            "at_desination_threshold": 0.05,
+            "at_destination_threshold": 0.05,
         },
     )
    

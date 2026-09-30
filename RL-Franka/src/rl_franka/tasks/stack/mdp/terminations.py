@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 import torch
 from isaaclab.managers import SceneEntityCfg
 from isaaclab.managers import ManagerTermBase, TerminationTermCfg
-from isaaclab.utils.math import combine_frame_transformers
+from isaaclab.utils.math import combine_frame_transforms
 
 if TYPE_CHECKING:
     from isaaclab.assets import RigidObject

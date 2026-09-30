@@ -4,22 +4,26 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 __all__ = [
+    # rewards
+    "object_goal_distance"
     "object_ee_distance",
-    "object_is_lifted",
-    "object_grasped",
     "grasp_reward",
-    "object_goal_distance",
+    "object_is_lifted",
+    "cube_at_destination",
+    # observations
     "ee_frame_pos",
     "ee_frame_quat",
     "gripper_pos",
     "object_position_in_robot_root_frame",
-    "gripper_mid_point",
+    # terminations
+    "task_success",
 ]
 
 
 # Forward stable MDP terms lazily, then override with environment-specific terms below.
 from isaaclab.envs.mdp import *  # noqa: F401, F403
 
-from .rewards import  object_ee_distance, object_is_lifted, grasp_reward, object_grasped, object_goal_distance, gripper_mid_point
+from .rewards import  object_goal_distance, object_ee_distance, grasp_reward, object_is_lifted, cube_at_destination
 from .observations import ee_frame_pos, ee_frame_quat, gripper_pos, object_position_in_robot_root_frame
+from terminations import task_success
 from isaaclab.envs.mdp import *
