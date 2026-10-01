@@ -102,7 +102,6 @@ def grasp_reward(env: ManagerBasedRLEnv,
     grasp_point = ee_frame.data.target_pos_w.torch [:,0,:] 
     object_ee_distance = torch.linalg.norm(cube_pos_w - grasp_point, dim=1)
 
-   
     gripper_joint_ids, _ = robot.find_joints(env.cfg.gripper_joint_names)
     assert len(gripper_joint_ids) >= 1, "Observations require at least one gripper joint"
 
@@ -152,7 +151,7 @@ class cube_at_destination(ManagerTermBase):
         obj: RigidObject = env.scene [ object_cfg.name]
         command = env.command_manager.get_command(command_name)
         des_pos_w, _ = combine_frame_transforms(
-            robot.data.root_pos_w.torch, robot.data.root_quat_w.torch, command [:,:3]
+        robot.data.root_pos_w.torch, robot.data.root_quat_w.torch, command [:,:3]
         )
 
         object_pos_w = obj.data.root_pos_w.torch
@@ -166,3 +165,16 @@ class cube_at_destination(ManagerTermBase):
         success = self._was_lifted & check_position
 
         return success.float()
+
+
+def lifting_progress(
+    env:ManagerBasedRLEnv,object_cfg:SceneEntityCfg = SceneEntityCfg("cube_1"),
+    starting_height:float = 0.58,
+    target_height:float = 0.62)-> torch.Tensor:
+
+    obj: RigidObject = env.scene[object_cfg.name]
+    cube_z = obj.data.root_pos_w.torch[:,2]
+
+    progress = (cube_z-starting_height)/(target_height - starting_height)
+
+    return torch.clamp(progress, min = 0.0, max = 1.0)

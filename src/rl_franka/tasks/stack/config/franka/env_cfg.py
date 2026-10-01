@@ -263,34 +263,41 @@ class RewardsCfg:
     grasp = RewTerm(
         func=mdp.grasp_reward,
         params= {"object_cfg": SceneEntityCfg("cube_1"),"ee_frame_cfg": SceneEntityCfg("ee_frame"),
-                 "robot_cfg": SceneEntityCfg("robot"),},
+                "robot_cfg": SceneEntityCfg("robot"),},
         weight = 3.5,
     )
 
+    lift_progress = RewTerm(
+        func=mdp.lifting_progress,
+        params = {"starting_height": 0.58,
+            "target_height": 0.62,
+            "object_cfg": SceneEntityCfg("cube_1"),},
+        weight = 2,
+    )
     lift = RewTerm(
         func=mdp.object_is_lifted,
-        params={"minimal_height": 0.60, "object_cfg": SceneEntityCfg("cube_1")},
+        params={"minimal_height": 0.62, "object_cfg": SceneEntityCfg("cube_1")},
         weight=10.0,
     )
 
     object_goal_tracking_fine_grained = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.05, "minimal_height": 0.60, "command_name": "object_pose"},
+        params={"std": 0.05, "minimal_height": 0.62, "command_name": "object_pose"},
         weight=5.0,
     )
 
     object_goal_tracking = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.3, "minimal_height": 0.60, "command_name": "object_pose", "success_threshold": 0.05},
+        params={"std": 0.3, "minimal_height": 0.62, "command_name": "object_pose", "success_threshold": 0.05},
         weight=16.0,
     )
 
 
     success_reward = RewTerm(
         func = mdp.cube_at_destination,
-        params = {"command_name": "object_pose","height_lift": 0.60,"at_destination_treshold": 0.05,
-                  "object_cfg": SceneEntityCfg ("cube_1"),"robot_cfg": SceneEntityCfg("robot"),
-                  },
+        params = {"command_name": "object_pose","height_lift": 0.62,"at_destination_treshold": 0.05,
+                "object_cfg": SceneEntityCfg ("cube_1"),"robot_cfg": SceneEntityCfg("robot"),
+                },
         weight = 30,
     )
 
@@ -305,7 +312,6 @@ class RewardsCfg:
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
 
-  
 
 
 @configclass
@@ -324,11 +330,11 @@ class TerminationsCfg:
         func = mdp.task_success,
         params = {
             "command_name": "object_pose",
-            "height_lift": 0.60,
+            "height_lift": 0.62,
             "at_destination_threshold": 0.05,
         },
     )
-   
+
 @configclass
 class CommandsCfg:
     """Command terms for the MDP."""
