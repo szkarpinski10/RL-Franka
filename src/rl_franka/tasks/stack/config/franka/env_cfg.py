@@ -22,6 +22,7 @@ from isaaclab.visualizers import VisualizerCfg
 from isaaclab_newton.physics import KaminoPADMMSolverCfg, MJWarpSolverCfg, NewtonCfg
 from isaaclab_ov.physics import OvPhysxCfg
 from isaaclab_physx.physics import PhysxCfg
+from isaaclab_physx.sim.schemas import PhysxRigidBodyCfg
 from isaaclab.sensors import FrameTransformerCfg
 from isaaclab.sensors.frame_transformer.frame_transformer_cfg import OffsetCfg
 from isaaclab.sensors import ContactSensorCfg
@@ -100,13 +101,18 @@ class StackSceneCfg(InteractiveSceneCfg):
     cube_1 = RigidObjectCfg(
         prim_path = "{ENV_REGEX_NS}/Cube_1",
         init_state = RigidObjectCfg.InitialStateCfg(
-            pos = [0.45, 0.0, 0.58],
+            pos = [0.35, -0.30, 0.58],
         ),
         spawn=sim_utils.CuboidCfg(
                 size=(0.05, 0.05, 0.05),
-                rigid_props=sim_utils.RigidBodyPropertiesCfg(
-                    disable_gravity=False,
-                ),
+                    rigid_props=PhysxRigidBodyCfg(      
+                        solver_position_iteration_count=16,
+                        solver_velocity_iteration_count=1,
+                        max_angular_velocity=1000.0,
+                        max_linear_velocity=1000.0,
+                        max_depenetration_velocity=5.0,
+                        disable_gravity=False,
+                    ),
                 collision_props=sim_utils.CollisionPropertiesCfg(),
                 visual_material=sim_utils.PreviewSurfaceCfg(
                     diffuse_color=(1.0, 0.0, 0.0),
@@ -272,23 +278,23 @@ class RewardsCfg:
         params = {"starting_height": 0.58,
             "target_height": 0.62,
             "object_cfg": SceneEntityCfg("cube_1"),},
-        weight = 2,
+        weight = 2.5,
     )
-    lift = RewTerm(
-        func=mdp.object_is_lifted,
-        params={"minimal_height": 0.62, "object_cfg": SceneEntityCfg("cube_1")},
-        weight=10.0,
-    )
+    # lift = RewTerm(
+    #     func=mdp.object_is_lifted,
+    #     params={"minimal_height": 0.62, "object_cfg": SceneEntityCfg("cube_1")},
+    #     weight=1.5,
+    # )
 
     object_goal_tracking_fine_grained = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.05, "minimal_height": 0.62, "command_name": "object_pose"},
+        params={"std": 0.10, "minimal_height": 0.62, "command_name": "object_pose"},
         weight=5.0,
     )
 
     object_goal_tracking = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.3, "minimal_height": 0.62, "command_name": "object_pose", "success_threshold": 0.05},
+        params={"std": 0.60, "minimal_height": 0.62, "command_name": "object_pose", "success_threshold": 0.05},
         weight=16.0,
     )
 
@@ -312,6 +318,10 @@ class RewardsCfg:
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
 
+    cube_near_robot_base_penalty = RewTerm(func = mdp.cube_near_robot,
+        params = {"area":0.15},
+        weight = -5,
+    )
 
 
 @configclass
@@ -345,7 +355,7 @@ class CommandsCfg:
         resampling_time_range = (1000,1000),
         debug_vis = True,
         ranges = mdp.UniformPoseCommandCfg.Ranges(
-            pos_x=(0.50, 0.55), pos_y=(-0.10, 0.10), pos_z=(0.0, 0.0), roll=(0.0, 0.0), pitch=(0.0, 0.0), yaw=(0.0, 0.0),
+            pos_x=(0.60, 0.65), pos_y=(0.20, 0.25), pos_z=(0.025, 0.025), roll=(0.0, 0.0), pitch=(0.0, 0.0), yaw=(0.0, 0.0),
         ),
     )
 
@@ -355,11 +365,11 @@ class CurriculumCfg:
     
 
     action_rate = CurrTerm(
-        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -1e-2, "num_steps": 100000000}
+        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -1e-2, "num_steps": 10000}
     )
 
     joint_vel = CurrTerm(
-        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -1e-2, "num_steps": 100000000}
+        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -1e-2, "num_steps": 10000}
     )
 
 #

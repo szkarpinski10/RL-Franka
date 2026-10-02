@@ -12,7 +12,7 @@ from isaaclab_rl.rsl_rl import RslRlMLPModelCfg, RslRlOnPolicyRunnerCfg, RslRlPp
 class PPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 2048
     max_iterations = 1000
-    save_interval = 25 
+    save_interval = 10 
     experiment_name = "franka_lift"
     obs_groups = {"actor": ["policy"], "critic": ["policy"]}
     actor = RslRlMLPModelCfg(

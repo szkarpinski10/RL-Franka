@@ -162,7 +162,13 @@ class cube_at_destination(ManagerTermBase):
 
         check_position = distance <at_destination_treshold
 
-        success = self._was_lifted & check_position
+        gripper_joint_ids, _ = robot.find_joints(env.cfg.gripper_joint_names)
+        open_val = torch.tensor(env.cfg.gripper_open_val, dtype=torch.float32).to(env.device)
+        cube_released = torch.ones(env.num_envs, dtype=torch.bool, device=env.device)
+        for joint_id in gripper_joint_ids:
+            cube_released &= torch.abs(robot.data.joint_pos.torch[:,joint_id]-open_val) <env.cfg.gripper_threshold
+
+        success = self._was_lifted & check_position & cube_released
 
         return success.float()
 
@@ -178,3 +184,21 @@ def lifting_progress(
     progress = (cube_z-starting_height)/(target_height - starting_height)
 
     return torch.clamp(progress, min = 0.0, max = 1.0)
+
+
+def cube_near_robot(
+    env:ManagerBasedRLEnv,
+    area: float,
+    object_cfg:SceneEntityCfg = SceneEntityCfg("cube_1"),
+    robot_cfg:SceneEntityCfg = SceneEntityCfg("robot"),
+) ->torch.Tensor:
+
+    robot: Articulation = env.scene[robot_cfg.name]
+    object: RigidObject = env.scene[object_cfg.name]
+    cube_x_y = object.data.root_pos_w.torch[:,[0,1]]
+    robot_x_y = robot.data.root_pos_w.torch[:,[0,1]]
+
+    diff = cube_x_y - robot_x_y
+    distance_cube_to_robot = torch.linalg.norm(diff,dim=1)
+
+    return torch.clamp((area-distance_cube_to_robot)/area,min = 0.0,max = 1.0)

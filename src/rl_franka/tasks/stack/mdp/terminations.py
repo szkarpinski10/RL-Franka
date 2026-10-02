@@ -47,5 +47,12 @@ class task_success(ManagerTermBase):
 
         is_lifted = object_pos_w[:,2] > height_lift
         self._was_lifted |= is_lifted
+        check_position = distance <at_destination_threshold
 
-        return (self._was_lifted & (distance<at_destination_threshold))
+        gripper_joint_ids, _ = robot.find_joints(env.cfg.gripper_joint_names)
+        open_val = torch.tensor(env.cfg.gripper_open_val, dtype=torch.float32).to(env.device)
+        cube_released = torch.ones(env.num_envs, dtype=torch.bool, device=env.device)
+        for joint_id in gripper_joint_ids:
+            cube_released &= torch.abs(robot.data.joint_pos.torch[:, joint_id] - open_val) < env.cfg.gripper_threshold
+
+        return (self._was_lifted & check_position & cube_released)
