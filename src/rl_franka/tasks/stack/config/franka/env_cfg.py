@@ -288,13 +288,13 @@ class RewardsCfg:
 
     object_goal_tracking_fine_grained = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.10, "minimal_height": 0.62, "command_name": "object_pose"},
+        params={"std": 0.10, "minimal_height": 0.59, "command_name": "object_pose"},
         weight=5.0,
     )
 
     object_goal_tracking = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.60, "minimal_height": 0.62, "command_name": "object_pose", "success_threshold": 0.05},
+        params={"std": 0.60, "minimal_height": 0.59, "command_name": "object_pose", "success_threshold": 0.05},
         weight=16.0,
     )
 
@@ -335,15 +335,15 @@ class TerminationsCfg:
         func=mdp.root_height_below_minimum,
         params={"minimum_height": 0.52, "asset_cfg": SceneEntityCfg("cube_1")},
     )
-    # (3) Success
-    success = DoneTerm(
-        func = mdp.task_success,
-        params = {
-            "command_name": "object_pose",
-            "height_lift": 0.62,
-            "at_destination_threshold": 0.05,
-        },
-    )
+    # # (3) Success
+    # success = DoneTerm(
+    #     func = mdp.task_success,
+    #     params = {
+    #         "command_name": "object_pose",
+    #         "height_lift": 0.62,
+    #         "at_destination_threshold": 0.05,
+    #     },
+    # )
 
 @configclass
 class CommandsCfg:
