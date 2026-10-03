@@ -13,7 +13,7 @@ class LiftCubePPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 24
     max_iterations = 1500
     save_interval = 50
-    experiment_name = "franka_sk"
+    experiment_name = "sk"
     actor = RslRlMLPModelCfg(
         hidden_dims=[256, 128, 64],
         activation="elu",
