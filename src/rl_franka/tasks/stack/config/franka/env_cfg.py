@@ -362,14 +362,15 @@ class CommandsCfg:
 
 @configclass
 class CurriculumCfg:
-    
+
+   
 
     action_rate = CurrTerm(
-        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -1e-2, "num_steps": 10000}
+        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -1e-1, "num_steps": 5000}
     )
 
     joint_vel = CurrTerm(
-        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -1e-2, "num_steps": 10000}
+        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -1e-1, "num_steps": 5000}
     )
 
 #
@@ -403,7 +404,7 @@ class StackEnvCfg(ManagerBasedRLEnvCfg):
 
         # general settings
         self.decimation = 2
-        self.episode_length_s = 15
+        self.episode_length_s = 10
         
         # visualizer camera settings
         self.sim.default_visualizer_cfg = VisualizerCfg(eye=(8.0, 0.0, 5.0))
