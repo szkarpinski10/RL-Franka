@@ -276,7 +276,7 @@ class RewardsCfg:
     lift_progress = RewTerm(
         func=mdp.lifting_progress,
         params = {"starting_height": 0.58,
-            "target_height": 0.62,
+            "target_height": 0.65,
             "object_cfg": SceneEntityCfg("cube_1"),},
         weight = 2.5,
     )
@@ -288,23 +288,23 @@ class RewardsCfg:
 
     object_goal_tracking_fine_grained = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.10, "minimal_height": 0.59, "command_name": "object_pose"},
+        params={"std": 0.10, "minimal_height": 0.65, "command_name": "object_pose"},
         weight=5.0,
     )
 
     object_goal_tracking = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.60, "minimal_height": 0.59, "command_name": "object_pose", "success_threshold": 0.05},
+        params={"std": 0.60, "minimal_height": 0.65, "command_name": "object_pose", "success_threshold": 0.05},
         weight=16.0,
     )
 
 
     success_reward = RewTerm(
         func = mdp.cube_at_destination,
-        params = {"command_name": "object_pose","height_lift": 0.62,"at_destination_treshold": 0.05,
+        params = {"command_name": "object_pose","height_lift": 0.65,"at_destination_treshold": 0.05,
                 "object_cfg": SceneEntityCfg ("cube_1"),"robot_cfg": SceneEntityCfg("robot"),
                 },
-        weight = 30,
+        weight = 60,
     )
 
 
@@ -404,7 +404,7 @@ class StackEnvCfg(ManagerBasedRLEnvCfg):
 
         # general settings
         self.decimation = 2
-        self.episode_length_s = 10
+        self.episode_length_s = 7
         
         # visualizer camera settings
         self.sim.default_visualizer_cfg = VisualizerCfg(eye=(8.0, 0.0, 5.0))
