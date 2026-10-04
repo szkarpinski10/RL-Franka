@@ -13,8 +13,6 @@ __all__ = [
     "arm_home_after_place",
     "cube_under_control",
     "cube_lifted",
-    "reaching_until_placed",
-
 
     # observations
     "ee_frame_pos",
@@ -29,7 +27,6 @@ __all__ = [
 # Forward stable MDP terms lazily, then override with environment-specific terms below.
 from isaaclab.envs.mdp import *  # noqa: F401, F403
 
-from .rewards import  object_is_lifted, object_ee_distance, object_goal_distance,cube_target_distance, cube_placed, arm_home_after_place, cube_under_control, cube_lifted, reaching_until_placed
+from .rewards import  object_is_lifted, object_ee_distance, object_goal_distance,cube_target_distance, cube_placed, arm_home_after_place, cube_under_control, cube_lifted
 from .observations import ee_frame_pos, ee_frame_quat, gripper_pos, object_position_in_robot_root_frame
 from .terminations import task_success
-from isaaclab.envs.mdp import *
