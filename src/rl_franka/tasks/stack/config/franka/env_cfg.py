@@ -101,7 +101,7 @@ class StackSceneCfg(InteractiveSceneCfg):
     cube_1 = RigidObjectCfg(
         prim_path = "{ENV_REGEX_NS}/Cube_1",
         init_state = RigidObjectCfg.InitialStateCfg(
-            pos = [0.35, -0.30, 0.58],
+            pos = [0.35, 0.0, 0.58],
         ),
         spawn=sim_utils.CuboidCfg(
                 size=(0.05, 0.05, 0.05),
@@ -151,14 +151,6 @@ class StackSceneCfg(InteractiveSceneCfg):
                 offset=OffsetCfg(pos=(0.0, 0.0, 0.046)),
             ),
         ]
-    )
-
-    # sensor 
-    ee_sensor = ContactSensorCfg(
-    prim_path="{ENV_REGEX_NS}/Robot/panda_hand",
-    update_period=0.0,
-    history_length=3,
-    debug_vis=False,
     )
 
 
@@ -249,7 +241,7 @@ class EventCfg:
         params={
             "pose_range": {
                 "x": (-0.02, 0.02), "y": (-0.02, 0.02), "z": (0, 0),
-                "roll": (0, 0), "pitch": (0, 0), "yaw": (-math.pi, math.pi),
+                "roll": (0, 0), "pitch": (0, 0), "yaw": (0, 0),
             },
             "velocity_range": {},
             "asset_cfg": SceneEntityCfg("cube_1"),
@@ -260,51 +252,21 @@ class EventCfg:
 @configclass
 class RewardsCfg:
     """Reward terms for the MDP."""
-    reach = RewTerm(
-        func=mdp.object_ee_distance,
-        params={"std": 0.1, "object_cfg": SceneEntityCfg("cube_1"), "ee_frame_cfg": SceneEntityCfg("ee_frame")},
-        weight=1.0,
-    )
 
-    grasp = RewTerm(
-        func=mdp.grasp_reward,
-        params= {"object_cfg": SceneEntityCfg("cube_1"),"ee_frame_cfg": SceneEntityCfg("ee_frame"),
-                "robot_cfg": SceneEntityCfg("robot"),},
-        weight = 3.5,
-    )
+    reaching_object = RewTerm(func=mdp.object_ee_distance, params={"std": 0.1}, weight=1.0)
 
-    lift_progress = RewTerm(
-        func=mdp.lifting_progress,
-        params = {"starting_height": 0.58,
-            "target_height": 0.62,
-            "object_cfg": SceneEntityCfg("cube_1"),},
-        weight = 2.5,
-    )
-    # lift = RewTerm(
-    #     func=mdp.object_is_lifted,
-    #     params={"minimal_height": 0.62, "object_cfg": SceneEntityCfg("cube_1")},
-    #     weight=1.5,
-    # )
-
-    object_goal_tracking_fine_grained = RewTerm(
-        func=mdp.object_goal_distance,
-        params={"std": 0.10, "minimal_height": 0.59, "command_name": "object_pose"},
-        weight=5.0,
-    )
+    lifting_object = RewTerm(func=mdp.object_is_lifted, params={"minimal_height": 0.59}, weight=15.0)
 
     object_goal_tracking = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.60, "minimal_height": 0.59, "command_name": "object_pose", "success_threshold": 0.05},
+        params={"std": 0.6, "minimal_height": 0.59, "command_name": "object_pose", "success_threshold": 0.05},
         weight=16.0,
     )
 
-
-    success_reward = RewTerm(
-        func = mdp.cube_at_destination,
-        params = {"command_name": "object_pose","height_lift": 0.62,"at_destination_treshold": 0.05,
-                "object_cfg": SceneEntityCfg ("cube_1"),"robot_cfg": SceneEntityCfg("robot"),
-                },
-        weight = 30,
+    object_goal_tracking_fine_grained = RewTerm(
+        func=mdp.object_goal_distance,
+        params={"std": 0.1, "minimal_height": 0.59, "command_name": "object_pose"},
+        weight=5.0,
     )
 
 
@@ -318,11 +280,6 @@ class RewardsCfg:
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
 
-    cube_near_robot_base_penalty = RewTerm(func = mdp.cube_near_robot,
-        params = {"area":0.15},
-        weight = -5,
-    )
-
 
 @configclass
 class TerminationsCfg:
@@ -333,17 +290,8 @@ class TerminationsCfg:
     # (2) Cube dropped 
     cube_1_height_below_minimum = DoneTerm(
         func=mdp.root_height_below_minimum,
-        params={"minimum_height": 0.52, "asset_cfg": SceneEntityCfg("cube_1")},
+        params={"minimum_height": 0.50, "asset_cfg": SceneEntityCfg("cube_1")},
     )
-    # # (3) Success
-    # success = DoneTerm(
-    #     func = mdp.task_success,
-    #     params = {
-    #         "command_name": "object_pose",
-    #         "height_lift": 0.62,
-    #         "at_destination_threshold": 0.05,
-    #     },
-    # )
 
 @configclass
 class CommandsCfg:
@@ -352,10 +300,10 @@ class CommandsCfg:
     object_pose = mdp.UniformPoseCommandCfg(
         asset_name = "robot",
         body_name = "panda_hand",
-        resampling_time_range = (1000,1000),
+        resampling_time_range = (7,7),
         debug_vis = True,
         ranges = mdp.UniformPoseCommandCfg.Ranges(
-            pos_x=(0.60, 0.65), pos_y=(0.20, 0.25), pos_z=(0.025, 0.025), roll=(0.0, 0.0), pitch=(0.0, 0.0), yaw=(0.0, 0.0),
+            pos_x=(0.60, 0.65), pos_y=(0.20, 0.25), pos_z=(0.25, 0.25), roll=(0.0, 0.0), pitch=(0.0, 0.0), yaw=(0.0, 0.0),
         ),
     )
 
@@ -363,14 +311,13 @@ class CommandsCfg:
 @configclass
 class CurriculumCfg:
 
-   
 
     action_rate = CurrTerm(
-        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -1e-1, "num_steps": 5000}
+        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -1e-1, "num_steps": 10000}
     )
 
     joint_vel = CurrTerm(
-        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -1e-1, "num_steps": 5000}
+        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -1e-1, "num_steps": 10000}
     )
 
 #
@@ -404,13 +351,13 @@ class StackEnvCfg(ManagerBasedRLEnvCfg):
 
         # general settings
         self.decimation = 2
-        self.episode_length_s = 10
+        self.episode_length_s = 7
         
         # visualizer camera settings
         self.sim.default_visualizer_cfg = VisualizerCfg(eye=(8.0, 0.0, 5.0))
         
         # simulation settings
-        self.sim.dt = 1 / 120
+        self.sim.dt = 0.01
         self.sim.render_interval = self.decimation
         self.sim.physics = PhysxCfg(
             bounce_threshold_velocity=0.01,
