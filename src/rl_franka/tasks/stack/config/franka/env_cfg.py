@@ -22,7 +22,7 @@ from isaaclab.visualizers import VisualizerCfg
 from isaaclab_newton.physics import KaminoPADMMSolverCfg, MJWarpSolverCfg, NewtonCfg
 from isaaclab_ov.physics import OvPhysxCfg
 from isaaclab_physx.physics import PhysxCfg
-from isaaclab_physx.sim.schemas import PhysxRigidBodyCfg
+from isaaclab_physx.sim.schemas import RigidBodyPropertiesCfg, PhysxRigidBodyCfg
 from isaaclab.sensors import FrameTransformerCfg
 from isaaclab.sensors.frame_transformer.frame_transformer_cfg import OffsetCfg
 from isaaclab.sensors import ContactSensorCfg
@@ -96,12 +96,27 @@ class StackSceneCfg(InteractiveSceneCfg):
             visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.2, 0.2, 0.2)),
         ),
     )
+
+    target_table = RigidObjectCfg(
+        prim_path = "{ENV_REGEX_NS}/Target_table",
+        init_state = RigidObjectCfg.InitialStateCfg(
+            pos = [0.5,0.3,0.58]
+        ),
+        spawn = sim_utils.CuboidCfg(
+            size = (0.15,0.15,0.06),
+            rigid_props = RigidBodyPropertiesCfg(kinematic_enabled = True),
+            collision_props = sim_utils.CollisionPropertiesCfg(),
+            visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.1, 0.4, 0.8)),
+
+
+        )
+    )
     
     # cube 
     cube_1 = RigidObjectCfg(
         prim_path = "{ENV_REGEX_NS}/Cube_1",
         init_state = RigidObjectCfg.InitialStateCfg(
-            pos = [0.35, 0.0, 0.58],
+            pos = [0.35, -0.15, 0.58],
         ),
         spawn=sim_utils.CuboidCfg(
                 size=(0.05, 0.05, 0.05),
@@ -200,9 +215,11 @@ class ObservationsCfg:
 
         # cube 
         object_position = ObsTerm(func=mdp.object_position_in_robot_root_frame)
+        target_table_position = ObsTerm(func=mdp.object_position_in_robot_root_frame,
+            params = {"object_cfg":SceneEntityCfg("target_table")},
+        )
 
-        # target position
-        target_object_position = ObsTerm(func=mdp.generated_commands, params={"command_name": "object_pose"})
+        
 
         
 
@@ -240,13 +257,27 @@ class EventCfg:
         mode="reset",
         params={
             "pose_range": {
-                "x": (-0.02, 0.02), "y": (-0.02, 0.02), "z": (0, 0),
+                "x": (-0.1, 0.1), "y": (-0.1, 0.1), "z": (0, 0),
                 "roll": (0, 0), "pitch": (0, 0), "yaw": (0, 0),
             },
             "velocity_range": {},
             "asset_cfg": SceneEntityCfg("cube_1"),
         },
     )
+
+    randomize_target_table_pos = EventTerm(
+        func=mdp.reset_root_state_uniform,
+        mode="reset",
+        params={
+            "pose_range": {
+                "x": (-0.1, 0.1), "y": (-0.1, 0.1), "z": (0, 0),
+                "roll": (0, 0), "pitch": (0, 0), "yaw": (0, 0),
+            },
+            "velocity_range": {},
+            "asset_cfg": SceneEntityCfg("target_table"),
+        },
+    )
+
 
 
 @configclass
@@ -255,18 +286,23 @@ class RewardsCfg:
 
     reaching_object = RewTerm(func=mdp.object_ee_distance, params={"std": 0.1}, weight=1.0)
 
-    lifting_object = RewTerm(func=mdp.object_is_lifted, params={"minimal_height": 0.59}, weight=15.0)
+    lifting_object = RewTerm(func=mdp.cube_lifted, params={"minimal_height": 0.59}, weight=15.0)
 
     object_goal_tracking = RewTerm(
-        func=mdp.object_goal_distance,
-        params={"std": 0.6, "minimal_height": 0.59, "command_name": "object_pose", "success_threshold": 0.05},
+        func=mdp.cube_target_distance,
+        params={"std": 0.6, "minimal_height": 0.59, "success_threshold": 0.05},
         weight=16.0,
     )
 
     object_goal_tracking_fine_grained = RewTerm(
-        func=mdp.object_goal_distance,
-        params={"std": 0.1, "minimal_height": 0.59, "command_name": "object_pose"},
+        func=mdp.cube_target_distance,
+        params={"std": 0.05, "minimal_height": 0.59},
         weight=5.0,
+    )
+
+    cube_placed = RewTerm(func = mdp.cube_placed, weight = 10.0)
+    arm_home = RewTerm(
+        func = mdp.arm_home_after_place, params = {"std": 2.0, }, weight = 10.0
     )
 
 
@@ -296,16 +332,18 @@ class TerminationsCfg:
 @configclass
 class CommandsCfg:
     """Command terms for the MDP."""
+
+    pass
     
-    object_pose = mdp.UniformPoseCommandCfg(
-        asset_name = "robot",
-        body_name = "panda_hand",
-        resampling_time_range = (7,7),
-        debug_vis = True,
-        ranges = mdp.UniformPoseCommandCfg.Ranges(
-            pos_x=(0.60, 0.65), pos_y=(0.20, 0.25), pos_z=(0.25, 0.25), roll=(0.0, 0.0), pitch=(0.0, 0.0), yaw=(0.0, 0.0),
-        ),
-    )
+    # object_pose = mdp.UniformPoseCommandCfg(
+    #     asset_name = "robot",
+    #     body_name = "panda_hand",
+    #     resampling_time_range = (7,7),
+    #     debug_vis = True,
+    #     ranges = mdp.UniformPoseCommandCfg.Ranges(
+    #         pos_x=(0.60, 0.65), pos_y=(0.20, 0.25), pos_z=(0.25, 0.25), roll=(0.0, 0.0), pitch=(0.0, 0.0), yaw=(0.0, 0.0),
+    #     ),
+    # )
 
 
 @configclass
@@ -351,7 +389,7 @@ class StackEnvCfg(ManagerBasedRLEnvCfg):
 
         # general settings
         self.decimation = 2
-        self.episode_length_s = 7
+        self.episode_length_s = 10
         
         # visualizer camera settings
         self.sim.default_visualizer_cfg = VisualizerCfg(eye=(8.0, 0.0, 5.0))
