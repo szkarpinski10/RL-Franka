@@ -1,0 +1,939 @@
+[INFO]: Parsing configuration from: rl_franka.tasks.stack.config.franka.env_cfg:StackEnvCfg
+[INFO]: Parsing configuration from: rl_franka.tasks.stack.config.franka.agents.rsl_rl_ppo_cfg:LiftCubePPORunnerCfg
+
+╭─ Isaac Lab · train ────────────────────────────╮      [0m         [0m[38;2;118;185;0m▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[0m
+│ Task          RL-Franka-Stack                  │      [0m      [0m[38;2;118;185;0m▄▄▄▛▀[0m[38;2;118;185;0m[48;2;118;185;0m             [0m
+│ Workflow      manager-based                    │      [0m  [0m[38;2;118;185;0m▗▄[0m[38;2;118;185;0m[48;2;118;185;0m  [0m[38;2;118;185;0m▀▀▜[0m[38;2;118;185;0m[48;2;118;185;0m   [0m[38;2;118;185;0m▄▄▀▜[0m[38;2;118;185;0m[48;2;118;185;0m        [0m
+│ RL library    rsl_rl                           │      [0m[38;2;118;185;0m▄[0m[38;2;118;185;0m[48;2;118;185;0m  [0m[38;2;118;185;0m▀▚▄[0m[38;2;118;185;0m[48;2;118;185;0m  [0m[38;2;118;185;0m▀▙▖[0m [0m[38;2;118;185;0m▀[0m[38;2;118;185;0m[48;2;118;185;0m  [0m[38;2;118;185;0m▄[0m [0m[38;2;118;185;0m▀[0m[38;2;118;185;0m[48;2;118;185;0m      [0m
+│ Physics       isaacsim_physx                   │      [0m[38;2;118;185;0m▝[0m[38;2;118;185;0m[48;2;118;185;0m  [0m[38;2;118;185;0m▖▝[0m[38;2;118;185;0m[48;2;118;185;0m [0m[38;2;118;185;0m▙[0m  [0m[38;2;118;185;0m[48;2;118;185;0m  [0m[38;2;118;185;0m▙▟[0m[38;2;118;185;0m[48;2;118;185;0m [0m[38;2;118;185;0m▛▘▄[0m[38;2;118;185;0m[48;2;118;185;0m       [0m
+│ Renderer      n/a (no camera sensors)          │      [0m [0m[38;2;118;185;0m▝[0m[38;2;118;185;0m[48;2;118;185;0m  [0m[38;2;118;185;0m▄▝▜[0m[38;2;118;185;0m[48;2;118;185;0m [0m[38;2;118;185;0m▄[0m[38;2;118;185;0m[48;2;118;185;0m  [0m[38;2;118;185;0m▛▀▚▄[0m[38;2;118;185;0m[48;2;118;185;0m  [0m[38;2;118;185;0m▛▘[0m [0m[38;2;118;185;0m▝▜[0m[38;2;118;185;0m[48;2;118;185;0m  [0m
+│ Visualizer    none (headless)                  │      [0m   [0m[38;2;118;185;0m▀[0m[38;2;118;185;0m[48;2;118;185;0m  [0m[38;2;118;185;0m▄▄[0m[38;2;118;185;0m[48;2;118;185;0m     [0m[38;2;118;185;0m▛▀▀▗▄▄▟[0m[38;2;118;185;0m[48;2;118;185;0m    [0m
+│ Device        cuda:0                           │      [0m      [0m[38;2;118;185;0m▀▀▀▙▄▄▄▟[0m[38;2;118;185;0m[48;2;118;185;0m          [0m
+│ Environments  4096                             │      [0m         [0m[38;2;118;185;0m▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[0m
+╰────────────────────────────────────────────────╯
+
+[1/3] Launching simulation
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791218871.733447   96153 descriptor_database.cc:633] File already exists in database: grpc/health/v1/health.proto
+W0000 00:00:1791218871.733473   96153 message.cc:301] Protobuf GeneratedMessageFactory: File is already registered: grpc/health/v1/health.proto
+[ISAACLAB] AppLauncher initialization complete
+[ISAACLAB] Kit version: 110.3.0+feature.371399.00c488ae.gl
+[ISAACLAB] Kit kernel:  210.3.2+release.14366.2926fc80.gl
+[ISAACLAB] Kit hash:    00c488ae
+[INFO] Logging experiment in directory: /home/szymon/Reinforcement_Learning_sk/rl_franka/logs/rsl_rl/praca_inz_place
+Exact experiment name requested from command line: 2026-10-05_18-47-52
+[2/3] Creating environment
+[INFO]: Base environment:
+	Environment device    : cuda:0
+	Environment seed      : 42
+	Physics step-size     : 0.01
+	Rendering step-size   : 0.02
+	Environment step-size : 0.02
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Environments/Grid/default_ground_plane_checker_v1/default_ground_plane.usda' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Environments/Grid/default_ground_plane_checker_v1/default_ground_plane.usda'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Environments/Grid/default_ground_plane_checker_v1/Materials/Textures/default_ground_plane_roughness.png' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Environments/Grid/default_ground_plane_checker_v1/Materials/Textures/default_ground_plane_roughness.png'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Environments/Grid/default_ground_plane_checker_v1/Materials/Textures/default_ground_plane_albedo.png' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Environments/Grid/default_ground_plane_checker_v1/Materials/Textures/default_ground_plane_albedo.png'.
+[INFO]: Registered backend 'physx' for factory Articulation.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/panda_instanceable.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/panda_instanceable.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_hand.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_hand.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Materials/Materials.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Materials/Materials.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link7.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link7.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link6.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link6.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link0.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link0.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link4.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link4.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_leftfinger.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_leftfinger.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_rightfinger.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_rightfinger.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link5.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link5.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link3.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link3.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link1.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link1.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link2.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/panda_link2.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/instanceable_collision_meshes.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Robots/FrankaEmika/Legacy/Props/instanceable_collision_meshes.usd'.
+[INFO]: Registered backend 'physx' for factory RigidObject.
+[INFO]: Registered backend 'physx' for factory FrameTransformer.
+[INFO]: Physics scene prim path: /physicsScene
+[INFO]: Time taken for scene creation Last: 6.300462 s, Mean: 6.300462 s, Std: 0.000000 s, N: 1
+[INFO]: Scene manager:  <class InteractiveScene>
+	Number of environments: 4096
+	Environment spacing   : 4.0
+	Source prim name      : /World/envs/env_0
+	Global prim paths     : []
+	Replicate physics     : True
+[INFO]: Simulation parameters for joints in /World/envs/env_[^/]+/Robot:
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                   Simulation Joint Information (Prim path: /World/envs/env_[^/]+/Robot)                                                   |
++-------+---------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+| Index | Name                | Stiffness | Damping | Armature | Static Friction | Dynamic Friction | Viscous Friction | Position Limits  | Velocity Limits | Effort Limits |
++-------+---------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+|   0   | panda_joint1        |   80.000  |  4.000  |  0.001   |      0.000      |      0.000       |      0.000       | [-2.897, 2.897]  |      2.175      |     87.000    |
+|   1   | panda_joint2        |   80.000  |  4.000  |  0.001   |      0.000      |      0.000       |      0.000       | [-1.763, 1.763]  |      2.175      |     87.000    |
+|   2   | panda_joint3        |   80.000  |  4.000  |  0.001   |      0.000      |      0.000       |      0.000       | [-2.897, 2.897]  |      2.175      |     87.000    |
+|   3   | panda_joint4        |   80.000  |  4.000  |  0.001   |      0.000      |      0.000       |      0.000       | [-3.072, -0.070] |      2.175      |     87.000    |
+|   4   | panda_joint5        |   80.000  |  4.000  |  0.001   |      0.000      |      0.000       |      0.000       | [-2.897, 2.897]  |      2.610      |     12.000    |
+|   5   | panda_joint6        |   80.000  |  4.000  |  0.001   |      0.000      |      0.000       |      0.000       | [-0.018, 3.753]  |      2.610      |     12.000    |
+|   6   | panda_joint7        |   80.000  |  4.000  |  0.001   |      0.000      |      0.000       |      0.000       | [-2.897, 2.897]  |      2.610      |     12.000    |
+|   7   | panda_finger_joint1 |  2.0e+03  | 100.000 |  0.000   |      0.000      |      0.000       |      0.000       |  [0.000, 0.040]  |      0.200      |    200.000    |
+|   8   | panda_finger_joint2 |  2.0e+03  | 100.000 |  0.000   |      0.000      |      0.000       |      0.000       |  [0.000, 0.040]  |      0.200      |    200.000    |
++-------+---------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+[INFO]: Offsets application needed from '/World/envs/env_[^/]+/Robot/panda_link0' to the following target frames: ['end_effector', 'tool_leftfinger', 'tool_rightfinger']
+[INFO]: Time taken for simulation start Last: 17.324977 s, Mean: 17.324977 s, Std: 0.000000 s, N: 1
+[INFO] Command Manager:  <CommandManager> contains 0 active terms.
++----------------------+
+| Active Command Terms |
++-------+------+-------+
+| Index | Name |  Type |
++-------+------+-------+
++-------+------+-------+
+
+[INFO] Event Manager:  <EventManager> contains 1 active terms.
++--------------------------------------+
+| Active Event Terms in Mode: 'reset'  |
++-------+------------------------------+
+| Index | Name                         |
++-------+------------------------------+
+|   0   | reset_all                    |
+|   1   | randomize_franka_joint_state |
+|   2   | randomize_cube1_pos          |
+|   3   | randomize_target_table_pos   |
++-------+------------------------------+
+
+[INFO] Recorder Manager:  <RecorderManager> contains 0 active terms.
++-----------------------+
+| Active Recorder Terms |
++------------+----------+
+|   Index    | Name     |
++------------+----------+
++------------+----------+
+
+[INFO]: Resolved joint names for the action term JointPositionAction: ['panda_joint1', 'panda_joint2', 'panda_joint3', 'panda_joint4', 'panda_joint5', 'panda_joint6', 'panda_joint7'] [tensor([0, 1, 2, 3, 4, 5, 6], device='cuda:0', dtype=torch.int32)]
+[INFO]: Resolved joint names for the action term BinaryJointPositionAction: ['panda_finger_joint1', 'panda_finger_joint2'] [[7 8]]
+[INFO] Action Manager:  <ActionManager> contains 2 active terms.
++------------------------------------+
+|   Active Action Terms (shape: 8)   |
++-------+----------------+-----------+
+| Index | Name           | Dimension |
++-------+----------------+-----------+
+|   0   | arm_action     |         7 |
+|   1   | gripper_action |         1 |
++-------+----------------+-----------+
+
+[INFO] Observation Manager: <ObservationManager> contains 1 groups.
++------------------------------------------------------------+
+| Active Observation Terms in Group: 'policy' (shape: (41,)) |
++----------+-------------------------------------+-----------+
+|  Index   | Name                                |   Shape   |
++----------+-------------------------------------+-----------+
+|    0     | joint_pos_rel                       |    (9,)   |
+|    1     | joint_vel_rel                       |    (9,)   |
+|    2     | actions                             |    (8,)   |
+|    3     | eef_pos                             |    (3,)   |
+|    4     | eef_quat                            |    (4,)   |
+|    5     | gripper_pos                         |    (2,)   |
+|    6     | object_position                     |    (3,)   |
+|    7     | target_table_position               |    (3,)   |
++----------+-------------------------------------+-----------+
+
+[INFO] Termination Manager:  <TerminationManager> contains 2 active terms.
++------------------------------------------------+
+|            Active Termination Terms            |
++-------+-----------------------------+----------+
+| Index | Name                        | Time Out |
++-------+-----------------------------+----------+
+|   0   | time_out                    |   True   |
+|   1   | cube_1_height_below_minimum |  False   |
++-------+-----------------------------+----------+
+
+[INFO] Reward Manager:  <RewardManager> contains 9 active terms.
++-----------------------------------------------------+
+|                 Active Reward Terms                 |
++-------+-----------------------------------+---------+
+| Index | Name                              |  Weight |
++-------+-----------------------------------+---------+
+|   0   | reaching_object                   |     1.0 |
+|   1   | lifting_object                    |    15.0 |
+|   2   | object_goal_tracking              |    16.0 |
+|   3   | object_goal_tracking_fine_grained |     5.0 |
+|   4   | cube_released                     |    10.0 |
+|   5   | arm_home                          |    10.0 |
+|   6   | arm_still_at_home                 |     5.0 |
+|   7   | action_rate                       | -0.0001 |
+|   8   | joint_vel                         | -0.0001 |
++-------+-----------------------------------+---------+
+
+[INFO] Curriculum Manager:  <CurriculumManager> contains 2 active terms.
++-------------------------+
+| Active Curriculum Terms |
++--------+----------------+
+| Index  | Name           |
++--------+----------------+
+|   0    | action_rate    |
+|   1    | joint_vel      |
++--------+----------------+
+
+[INFO]: Completed setting up the environment...
+[3/3] Preparing agent
+--------------------------------------------------------------------------------
+Resolved observation sets: 
+	 actor :  ['policy']
+	 critic :  ['policy']
+--------------------------------------------------------------------------------
+Actor Model: MLPModel(
+  (obs_normalizer): Identity()
+  (distribution): GaussianDistribution()
+  (mlp): MLP(
+    (0): Linear(in_features=41, out_features=256, bias=True)
+    (1): ELU(alpha=1.0)
+    (2): Linear(in_features=256, out_features=128, bias=True)
+    (3): ELU(alpha=1.0)
+    (4): Linear(in_features=128, out_features=64, bias=True)
+    (5): ELU(alpha=1.0)
+    (6): Linear(in_features=64, out_features=8, bias=True)
+  )
+)
+Critic Model: MLPModel(
+  (obs_normalizer): Identity()
+  (mlp): MLP(
+    (0): Linear(in_features=41, out_features=256, bias=True)
+    (1): ELU(alpha=1.0)
+    (2): Linear(in_features=256, out_features=128, bias=True)
+    (3): ELU(alpha=1.0)
+    (4): Linear(in_features=128, out_features=64, bias=True)
+    (5): ELU(alpha=1.0)
+    (6): Linear(in_features=64, out_features=1, bias=True)
+  )
+)
+Could not find git repository in /home/szymon/miniconda3/envs/env_isaaclab/lib/python3.12/site-packages/rsl_rl/__init__.py. Skipping.
+Storing git diff for 'IsaacLab' in: /home/szymon/Reinforcement_Learning_sk/rl_franka/logs/rsl_rl/praca_inz_place/2026-10-05_18-47-52/git/IsaacLab.diff
+################################################################################
+[1m                           Learning iteration 0/1201                            [0m 
+
+                            Total steps: 98304 
+                       Steps per second: 72087 
+                        Collection time: 1.198s 
+                          Learning time: 0.165s 
+                        Mean value loss: 0.0031
+                    Mean surrogate loss: -0.0039
+                      Mean entropy loss: 11.3609
+                            Mean reward: 0.01
+                    Mean episode length: 17.55
+                        Mean action std: 1.00
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0007
+          Episode_Reward/lifting_object: 0.0000
+    Episode_Reward/object_goal_tracking: 0.0000
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0000
+               Episode_Reward/joint_vel: -0.0001
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.0245
+Episode_Termination/cube_1_height_below_minimum: 0.0000
+--------------------------------------------------------------------------------
+                         Iteration time: 1.36s
+                           Time elapsed: 0:00:01
+                                    ETA: 0:27:16
+
+################################################################################
+[1m                           Learning iteration 1/1201                            [0m 
+
+                            Total steps: 196608 
+                       Steps per second: 154542 
+                        Collection time: 0.557s 
+                          Learning time: 0.079s 
+                        Mean value loss: 0.0007
+                    Mean surrogate loss: -0.0059
+                      Mean entropy loss: 11.3988
+                            Mean reward: 0.04
+                    Mean episode length: 41.74
+                        Mean action std: 1.01
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0035
+          Episode_Reward/lifting_object: 0.0000
+    Episode_Reward/object_goal_tracking: 0.0000
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0001
+               Episode_Reward/joint_vel: -0.0002
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.0755
+Episode_Termination/cube_1_height_below_minimum: 0.0000
+--------------------------------------------------------------------------------
+                         Iteration time: 0.64s
+                           Time elapsed: 0:00:01
+                                    ETA: 0:19:58
+
+################################################################################
+[1m                           Learning iteration 2/1201                            [0m 
+
+                            Total steps: 294912 
+                       Steps per second: 154022 
+                        Collection time: 0.566s 
+                          Learning time: 0.072s 
+                        Mean value loss: 0.0003
+                    Mean surrogate loss: -0.0077
+                      Mean entropy loss: 11.3985
+                            Mean reward: 0.06
+                    Mean episode length: 65.82
+                        Mean action std: 1.01
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0062
+          Episode_Reward/lifting_object: 0.0000
+    Episode_Reward/object_goal_tracking: 0.0000
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0002
+               Episode_Reward/joint_vel: -0.0003
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.1269
+Episode_Termination/cube_1_height_below_minimum: 0.0000
+--------------------------------------------------------------------------------
+                         Iteration time: 0.64s
+                           Time elapsed: 0:00:02
+                                    ETA: 0:17:33
+
+################################################################################
+[1m                           Learning iteration 3/1201                            [0m 
+
+                            Total steps: 393216 
+                       Steps per second: 156119 
+                        Collection time: 0.558s 
+                          Learning time: 0.071s 
+                        Mean value loss: 0.0006
+                    Mean surrogate loss: -0.0048
+                      Mean entropy loss: 11.4018
+                            Mean reward: 0.08
+                    Mean episode length: 87.92
+                        Mean action std: 1.00
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0079
+          Episode_Reward/lifting_object: 0.0000
+    Episode_Reward/object_goal_tracking: 0.0000
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0003
+               Episode_Reward/joint_vel: -0.0004
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.1703
+Episode_Termination/cube_1_height_below_minimum: 0.0000
+--------------------------------------------------------------------------------
+                         Iteration time: 0.63s
+                           Time elapsed: 0:00:03
+                                    ETA: 0:16:17
+
+################################################################################
+[1m                           Learning iteration 4/1201                            [0m 
+
+                            Total steps: 491520 
+                       Steps per second: 152351 
+                        Collection time: 0.573s 
+                          Learning time: 0.072s 
+                        Mean value loss: 0.0013
+                    Mean surrogate loss: -0.0049
+                      Mean entropy loss: 11.4220
+                            Mean reward: 0.14
+                    Mean episode length: 114.07
+                        Mean action std: 1.01
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0138
+          Episode_Reward/lifting_object: 0.0000
+    Episode_Reward/object_goal_tracking: 0.0000
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0003
+               Episode_Reward/joint_vel: -0.0005
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.2105
+Episode_Termination/cube_1_height_below_minimum: 0.0000
+--------------------------------------------------------------------------------
+                         Iteration time: 0.65s
+                           Time elapsed: 0:00:03
+                                    ETA: 0:15:35
+
+################################################################################
+[1m                           Learning iteration 5/1201                            [0m 
+
+                            Total steps: 589824 
+                       Steps per second: 154599 
+                        Collection time: 0.563s 
+                          Learning time: 0.073s 
+                        Mean value loss: 0.0011
+                    Mean surrogate loss: -0.0072
+                      Mean entropy loss: 11.4375
+                            Mean reward: 0.20
+                    Mean episode length: 138.94
+                        Mean action std: 1.01
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0186
+          Episode_Reward/lifting_object: 0.0001
+    Episode_Reward/object_goal_tracking: 0.0000
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0004
+               Episode_Reward/joint_vel: -0.0007
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.2606
+Episode_Termination/cube_1_height_below_minimum: 0.0001
+--------------------------------------------------------------------------------
+                         Iteration time: 0.64s
+                           Time elapsed: 0:00:04
+                                    ETA: 0:15:05
+
+################################################################################
+[1m                           Learning iteration 6/1201                            [0m 
+
+                            Total steps: 688128 
+                       Steps per second: 149086 
+                        Collection time: 0.587s 
+                          Learning time: 0.072s 
+                        Mean value loss: 0.0007
+                    Mean surrogate loss: -0.0089
+                      Mean entropy loss: 11.4380
+                            Mean reward: 0.27
+                    Mean episode length: 162.36
+                        Mean action std: 1.01
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0235
+          Episode_Reward/lifting_object: 0.0007
+    Episode_Reward/object_goal_tracking: 0.0003
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0005
+               Episode_Reward/joint_vel: -0.0008
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.3133
+Episode_Termination/cube_1_height_below_minimum: 0.0002
+--------------------------------------------------------------------------------
+                         Iteration time: 0.66s
+                           Time elapsed: 0:00:05
+                                    ETA: 0:14:48
+
+################################################################################
+[1m                           Learning iteration 7/1201                            [0m 
+
+                            Total steps: 786432 
+                       Steps per second: 154878 
+                        Collection time: 0.567s 
+                          Learning time: 0.068s 
+                        Mean value loss: 0.0041
+                    Mean surrogate loss: -0.0042
+                      Mean entropy loss: 11.4330
+                            Mean reward: 0.33
+                    Mean episode length: 185.87
+                        Mean action std: 1.01
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0333
+          Episode_Reward/lifting_object: 0.0001
+    Episode_Reward/object_goal_tracking: 0.0001
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0006
+               Episode_Reward/joint_vel: -0.0009
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.3630
+Episode_Termination/cube_1_height_below_minimum: 0.0002
+--------------------------------------------------------------------------------
+                         Iteration time: 0.63s
+                           Time elapsed: 0:00:05
+                                    ETA: 0:14:31
+
+################################################################################
+[1m                           Learning iteration 8/1201                            [0m 
+
+                            Total steps: 884736 
+                       Steps per second: 153101 
+                        Collection time: 0.570s 
+                          Learning time: 0.073s 
+                        Mean value loss: 0.0031
+                    Mean surrogate loss: -0.0035
+                      Mean entropy loss: 11.4511
+                            Mean reward: 0.44
+                    Mean episode length: 211.67
+                        Mean action std: 1.01
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0394
+          Episode_Reward/lifting_object: 0.0010
+    Episode_Reward/object_goal_tracking: 0.0005
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0007
+               Episode_Reward/joint_vel: -0.0010
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.4114
+Episode_Termination/cube_1_height_below_minimum: 0.0006
+--------------------------------------------------------------------------------
+                         Iteration time: 0.64s
+                           Time elapsed: 0:00:06
+                                    ETA: 0:14:18
+
+################################################################################
+[1m                           Learning iteration 9/1201                            [0m 
+
+                            Total steps: 983040 
+                       Steps per second: 151736 
+                        Collection time: 0.579s 
+                          Learning time: 0.069s 
+                        Mean value loss: 0.0028
+                    Mean surrogate loss: -0.0034
+                      Mean entropy loss: 11.4777
+                            Mean reward: 0.48
+                    Mean episode length: 234.24
+                        Mean action std: 1.02
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0485
+          Episode_Reward/lifting_object: 0.0017
+    Episode_Reward/object_goal_tracking: 0.0008
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0007
+               Episode_Reward/joint_vel: -0.0011
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.4620
+Episode_Termination/cube_1_height_below_minimum: 0.0007
+--------------------------------------------------------------------------------
+                         Iteration time: 0.65s
+                           Time elapsed: 0:00:07
+                                    ETA: 0:14:09
+
+################################################################################
+[1m                           Learning iteration 10/1201                           [0m 
+
+                            Total steps: 1081344 
+                       Steps per second: 151947 
+                        Collection time: 0.576s 
+                          Learning time: 0.071s 
+                        Mean value loss: 0.0020
+                    Mean surrogate loss: -0.0027
+                      Mean entropy loss: 11.4910
+                            Mean reward: 0.54
+                    Mean episode length: 257.62
+                        Mean action std: 1.02
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0551
+          Episode_Reward/lifting_object: 0.0006
+    Episode_Reward/object_goal_tracking: 0.0003
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0008
+               Episode_Reward/joint_vel: -0.0012
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.5067
+Episode_Termination/cube_1_height_below_minimum: 0.0009
+--------------------------------------------------------------------------------
+                         Iteration time: 0.65s
+                           Time elapsed: 0:00:07
+                                    ETA: 0:14:01
+
+################################################################################
+[1m                           Learning iteration 11/1201                           [0m 
+
+                            Total steps: 1179648 
+                       Steps per second: 148514 
+                        Collection time: 0.586s 
+                          Learning time: 0.076s 
+                        Mean value loss: 0.0020
+                    Mean surrogate loss: -0.0023
+                      Mean entropy loss: 11.5046
+                            Mean reward: 0.74
+                    Mean episode length: 280.59
+                        Mean action std: 1.02
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0655
+          Episode_Reward/lifting_object: 0.0028
+    Episode_Reward/object_goal_tracking: 0.0011
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0009
+               Episode_Reward/joint_vel: -0.0014
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.5539
+Episode_Termination/cube_1_height_below_minimum: 0.0012
+--------------------------------------------------------------------------------
+                         Iteration time: 0.66s
+                           Time elapsed: 0:00:08
+                                    ETA: 0:13:56
+
+################################################################################
+[1m                           Learning iteration 12/1201                           [0m 
+
+                            Total steps: 1277952 
+                       Steps per second: 148497 
+                        Collection time: 0.592s 
+                          Learning time: 0.070s 
+                        Mean value loss: 0.0047
+                    Mean surrogate loss: -0.0013
+                      Mean entropy loss: 11.5522
+                            Mean reward: 0.69
+                    Mean episode length: 302.08
+                        Mean action std: 1.03
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0656
+          Episode_Reward/lifting_object: 0.0026
+    Episode_Reward/object_goal_tracking: 0.0011
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0010
+               Episode_Reward/joint_vel: -0.0015
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.6021
+Episode_Termination/cube_1_height_below_minimum: 0.0016
+--------------------------------------------------------------------------------
+                         Iteration time: 0.66s
+                           Time elapsed: 0:00:09
+                                    ETA: 0:13:51
+
+################################################################################
+[1m                           Learning iteration 13/1201                           [0m 
+
+                            Total steps: 1376256 
+                       Steps per second: 148542 
+                        Collection time: 0.591s 
+                          Learning time: 0.071s 
+                        Mean value loss: 0.0029
+                    Mean surrogate loss: -0.0004
+                      Mean entropy loss: 11.6298
+                            Mean reward: 0.72
+                    Mean episode length: 327.75
+                        Mean action std: 1.04
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0750
+          Episode_Reward/lifting_object: 0.0010
+    Episode_Reward/object_goal_tracking: 0.0005
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0011
+               Episode_Reward/joint_vel: -0.0016
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.6470
+Episode_Termination/cube_1_height_below_minimum: 0.0020
+--------------------------------------------------------------------------------
+                         Iteration time: 0.66s
+                           Time elapsed: 0:00:09
+                                    ETA: 0:13:47
+
+################################################################################
+[1m                           Learning iteration 14/1201                           [0m 
+
+                            Total steps: 1474560 
+                       Steps per second: 149457 
+                        Collection time: 0.587s 
+                          Learning time: 0.071s 
+                        Mean value loss: 0.0021
+                    Mean surrogate loss: -0.0011
+                      Mean entropy loss: 11.6866
+                            Mean reward: 0.93
+                    Mean episode length: 355.27
+                        Mean action std: 1.04
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0812
+          Episode_Reward/lifting_object: 0.0044
+    Episode_Reward/object_goal_tracking: 0.0017
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0011
+               Episode_Reward/joint_vel: -0.0017
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.6964
+Episode_Termination/cube_1_height_below_minimum: 0.0022
+--------------------------------------------------------------------------------
+                         Iteration time: 0.66s
+                           Time elapsed: 0:00:10
+                                    ETA: 0:13:44
+
+################################################################################
+[1m                           Learning iteration 15/1201                           [0m 
+
+                            Total steps: 1572864 
+                       Steps per second: 152094 
+                        Collection time: 0.575s 
+                          Learning time: 0.071s 
+                        Mean value loss: 0.0027
+                    Mean surrogate loss: -0.0010
+                      Mean entropy loss: 11.7117
+                            Mean reward: 0.89
+                    Mean episode length: 371.01
+                        Mean action std: 1.05
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0867
+          Episode_Reward/lifting_object: 0.0013
+    Episode_Reward/object_goal_tracking: 0.0006
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0012
+               Episode_Reward/joint_vel: -0.0018
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.7451
+Episode_Termination/cube_1_height_below_minimum: 0.0023
+--------------------------------------------------------------------------------
+                         Iteration time: 0.65s
+                           Time elapsed: 0:00:11
+                                    ETA: 0:13:39
+
+################################################################################
+[1m                           Learning iteration 16/1201                           [0m 
+
+                            Total steps: 1671168 
+                       Steps per second: 149780 
+                        Collection time: 0.584s 
+                          Learning time: 0.072s 
+                        Mean value loss: 0.0015
+                    Mean surrogate loss: -0.0032
+                      Mean entropy loss: 11.7561
+                            Mean reward: 1.05
+                    Mean episode length: 403.40
+                        Mean action std: 1.05
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.0951
+          Episode_Reward/lifting_object: 0.0035
+    Episode_Reward/object_goal_tracking: 0.0012
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0013
+               Episode_Reward/joint_vel: -0.0019
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.7929
+Episode_Termination/cube_1_height_below_minimum: 0.0027
+--------------------------------------------------------------------------------
+                         Iteration time: 0.66s
+                           Time elapsed: 0:00:11
+                                    ETA: 0:13:36
+
+################################################################################
+[1m                           Learning iteration 17/1201                           [0m 
+
+                            Total steps: 1769472 
+                       Steps per second: 148106 
+                        Collection time: 0.591s 
+                          Learning time: 0.073s 
+                        Mean value loss: 0.0006
+                    Mean surrogate loss: -0.0059
+                      Mean entropy loss: 11.7692
+                            Mean reward: 1.06
+                    Mean episode length: 416.80
+                        Mean action std: 1.05
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.1009
+          Episode_Reward/lifting_object: 0.0030
+    Episode_Reward/object_goal_tracking: 0.0012
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0014
+               Episode_Reward/joint_vel: -0.0020
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.8424
+Episode_Termination/cube_1_height_below_minimum: 0.0031
+--------------------------------------------------------------------------------
+                         Iteration time: 0.66s
+                           Time elapsed: 0:00:12
+                                    ETA: 0:13:34
+
+################################################################################
+[1m                           Learning iteration 18/1201                           [0m 
+
+                            Total steps: 1867776 
+                       Steps per second: 142583 
+                        Collection time: 0.616s 
+                          Learning time: 0.073s 
+                        Mean value loss: 0.0020
+                    Mean surrogate loss: -0.0047
+                      Mean entropy loss: 11.7735
+                            Mean reward: 1.17
+                    Mean episode length: 449.68
+                        Mean action std: 1.06
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.1182
+          Episode_Reward/lifting_object: 0.0018
+    Episode_Reward/object_goal_tracking: 0.0008
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0015
+               Episode_Reward/joint_vel: -0.0022
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.8883
+Episode_Termination/cube_1_height_below_minimum: 0.0037
+--------------------------------------------------------------------------------
+                         Iteration time: 0.69s
+                           Time elapsed: 0:00:13
+                                    ETA: 0:13:33
+
+################################################################################
+[1m                           Learning iteration 19/1201                           [0m 
+
+                            Total steps: 1966080 
+                       Steps per second: 143955 
+                        Collection time: 0.606s 
+                          Learning time: 0.077s 
+                        Mean value loss: 0.0019
+                    Mean surrogate loss: -0.0046
+                      Mean entropy loss: 11.7814
+                            Mean reward: 1.14
+                    Mean episode length: 465.25
+                        Mean action std: 1.06
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.1171
+          Episode_Reward/lifting_object: 0.0042
+    Episode_Reward/object_goal_tracking: 0.0016
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0015
+               Episode_Reward/joint_vel: -0.0023
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.9344
+Episode_Termination/cube_1_height_below_minimum: 0.0042
+--------------------------------------------------------------------------------
+                         Iteration time: 0.68s
+                           Time elapsed: 0:00:13
+                                    ETA: 0:13:32
+
+################################################################################
+[1m                           Learning iteration 20/1201                           [0m 
+
+                            Total steps: 2064384 
+                       Steps per second: 145551 
+                        Collection time: 0.607s 
+                          Learning time: 0.068s 
+                        Mean value loss: 0.0026
+                    Mean surrogate loss: -0.0025
+                      Mean entropy loss: 11.7960
+                            Mean reward: 1.36
+                    Mean episode length: 489.52
+                        Mean action std: 1.06
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.1338
+          Episode_Reward/lifting_object: 0.0032
+    Episode_Reward/object_goal_tracking: 0.0012
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0016
+               Episode_Reward/joint_vel: -0.0024
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.9797
+Episode_Termination/cube_1_height_below_minimum: 0.0050
+--------------------------------------------------------------------------------
+                         Iteration time: 0.68s
+                           Time elapsed: 0:00:14
+                                    ETA: 0:13:31
+
+################################################################################
+[1m                           Learning iteration 21/1201                           [0m 
+
+                            Total steps: 2162688 
+                       Steps per second: 149896 
+                        Collection time: 0.588s 
+                          Learning time: 0.068s 
+                        Mean value loss: 0.0026
+                    Mean surrogate loss: -0.0033
+                      Mean entropy loss: 11.8170
+                            Mean reward: 1.46
+                    Mean episode length: 500.00
+                        Mean action std: 1.06
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.1417
+          Episode_Reward/lifting_object: 0.0032
+    Episode_Reward/object_goal_tracking: 0.0014
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0017
+               Episode_Reward/joint_vel: -0.0024
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.9932
+Episode_Termination/cube_1_height_below_minimum: 0.0068
+--------------------------------------------------------------------------------
+                         Iteration time: 0.66s
+                           Time elapsed: 0:00:15
+                                    ETA: 0:13:28
+
+################################################################################
+[1m                           Learning iteration 22/1201                           [0m 
+
+                            Total steps: 2260992 
+                       Steps per second: 145500 
+                        Collection time: 0.609s 
+                          Learning time: 0.066s 
+                        Mean value loss: 0.0041
+                    Mean surrogate loss: -0.0026
+                      Mean entropy loss: 11.8319
+                            Mean reward: 1.52
+                    Mean episode length: 485.62
+                        Mean action std: 1.06
+                  Metrics/cube_on_table: 0.0000
+         Episode_Reward/reaching_object: 0.1413
+          Episode_Reward/lifting_object: 0.0026
+    Episode_Reward/object_goal_tracking: 0.0008
+Episode_Reward/object_goal_tracking_fine_grained: 0.0000
+           Episode_Reward/cube_released: 0.0000
+                Episode_Reward/arm_home: 0.0000
+       Episode_Reward/arm_still_at_home: 0.0000
+             Episode_Reward/action_rate: -0.0017
+               Episode_Reward/joint_vel: -0.0024
+                 Curriculum/action_rate: -0.0001
+                   Curriculum/joint_vel: -0.0001
+           Episode_Termination/time_out: 0.9916
+Episode_Termination/cube_1_height_below_minimum: 0.0084
+--------------------------------------------------------------------------------
+                         Iteration time: 0.68s
+                           Time elapsed: 0:00:15
+                                    ETA: 0:13:27

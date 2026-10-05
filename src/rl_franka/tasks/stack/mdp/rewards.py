@@ -19,42 +19,59 @@ if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedRLEnv
     from isaaclab.sensors import FrameTransformer
 
-def cube_under_control(
+
+### pomocnicze funkcje
+
+#sprawdzenie czy kostka znajduje sie na target table
+def cube_at_target_pos(
+        env:ManagerBasedRLEnv,
+        table_widht: float = 0.025,
+        table_lenght: float = 0.025,
+        z_threshold: float = 0.025,
+        target_offset_z: float = 0.05,
+        target_cfg : SceneEntityCfg = SceneEntityCfg("target_table"),
+        object_cfg : SceneEntityCfg = SceneEntityCfg("cube_1"),
+
+
+) -> torch.Tensor: 
+    target: RigidObject = env.scene[target_cfg.name]
+    object: RigidObject = env.scene[object_cfg.name]
+
+    target_table_pos = target.data.root_pos_w.torch
+    cube_pos = object.data.root_pos_w.torch
+
+    diff = cube_pos - target_table_pos
+
+    check_x = torch.abs(diff[:,0])<table_lenght - 0.01
+    check_y = torch.abs(diff[:,1])<table_widht - 0.01
+    check_z = torch.abs(diff[:,2] - target_offset_z) < z_threshold
+
+    return check_x & check_y & check_z
+
+# sprawdzenie czy kostka jest w chwytaku albo na target table, prewencja podrzucania kostki do gory 
+def cube_control(
     env: ManagerBasedRLEnv,
     hold_threshold: float = 0.05,
-    table_xy: float = 0.07,
-    z_threshold: float = 0.01,
-    target_offset_z: float = 0.055,
     object_cfg: SceneEntityCfg = SceneEntityCfg("cube_1"),
-    target_cfg: SceneEntityCfg = SceneEntityCfg("target_table"),
     ee_frame_cfg: SceneEntityCfg = SceneEntityCfg("ee_frame"),
 ) -> torch.Tensor:
     cube: RigidObject = env.scene[object_cfg.name]
-    target: RigidObject = env.scene[target_cfg.name]
     ee_frame: FrameTransformer = env.scene[ee_frame_cfg.name]
 
     cube_pos = cube.data.root_pos_w.torch
-    table_pos = target.data.root_pos_w.torch
     ee_pos = ee_frame.data.target_pos_w.torch[:, 0, :]
 
-    # 1. kostka w chwytaku
-    in_gripper = torch.linalg.norm(cube_pos - ee_pos, dim=1) < hold_threshold
-
-    # 2. kostka leży na stoliku (gdziekolwiek na nim, nie tylko na środku)
-    on_table_xy = torch.linalg.norm(cube_pos[:, :2] - table_pos[:, :2], dim=1) < table_xy
-    on_table_z = torch.abs(cube_pos[:, 2] - (table_pos[:, 2] + target_offset_z)) < z_threshold
-
-    return in_gripper | (on_table_xy & on_table_z)
+    cube_in_gripper = torch.linalg.norm(cube_pos - ee_pos, dim=1) < hold_threshold
 
 
-def object_is_lifted(
-    env: ManagerBasedRLEnv, minimal_height: float, object_cfg: SceneEntityCfg = SceneEntityCfg("cube_1")
-) -> torch.Tensor:
-    """Reward the agent for lifting the object above the minimal height."""
-    object: RigidObject = env.scene[object_cfg.name]
-    return torch.where(object.data.root_pos_w.torch[:, 2] > minimal_height, 1.0, 0.0)
+    return cube_in_gripper | cube_at_target_pos(env)
 
 
+
+#funkcje - rewardy 
+# (1) reaching zmieniony względem nvidii - reaching nie działa w momencie kostki w miejscu docelowym 
+
+# nvidia 
 def object_ee_distance(
     env: ManagerBasedRLEnv,
     std: float,
@@ -74,6 +91,33 @@ def object_ee_distance(
 
     return 1 - torch.tanh(object_ee_distance / std)
 
+# poprawiona 
+def reaching_unless_at_target(
+        env:ManagerBasedRLEnv,
+        std:float , 
+) ->torch.Tensor:
+    reach = object_ee_distance(env,std)
+    return torch.where(cube_at_target_pos(env),1.0,reach)
+
+# (2) lift reward zmiana dodanie warunku, że kostka znajduje się w chwytaku - inaczej robot podrzuca kostke do góry
+def object_is_lifted(
+    env: ManagerBasedRLEnv, minimal_height: float, object_cfg: SceneEntityCfg = SceneEntityCfg("cube_1")
+) -> torch.Tensor:
+    """Reward the agent for lifting the object above the minimal height."""
+    object: RigidObject = env.scene[object_cfg.name]
+    return torch.where(object.data.root_pos_w.torch[:, 2] > minimal_height, 1.0, 0.0)
+
+def cube_is_lifted(
+    env: ManagerBasedRLEnv,
+    minimal_height: float,
+    object_cfg: SceneEntityCfg = SceneEntityCfg("cube_1"),
+) -> torch.Tensor:
+    cube: RigidObject = env.scene[object_cfg.name]
+    is_lifted = cube.data.root_pos_w.torch[:, 2] > minimal_height
+    return (is_lifted & cube_control(env)).float()
+
+
+# (3) naprowadzanie do celu 
 
 class object_goal_distance(ManagerTermBase):
     """Reward the agent for tracking the object-to-goal pose using a tanh kernel.
@@ -140,7 +184,7 @@ class cube_target_distance(ManagerTermBase):
             env: ManagerBasedRLEnv,
             std: float,
             minimal_height: float,
-            target_offset_z: float = 0.055,
+            target_offset_z: float = 0.05,
             target_cfg : SceneEntityCfg = SceneEntityCfg("target_table"),
             object_cfg : SceneEntityCfg = SceneEntityCfg("cube_1"),
             success_threshold: float | None = None,
@@ -154,66 +198,87 @@ class cube_target_distance(ManagerTermBase):
         cube_pos = object.data.root_pos_w.torch
         distance = torch.linalg.norm(target_pos - cube_pos, dim =1)
 
-        is_lifted = (cube_pos[:, 2] > minimal_height) & cube_under_control(env)
+        is_lifted = (cube_pos[:, 2] > minimal_height) & cube_control(env)
 
         if success_threshold is not None:
             self._succeeded |= is_lifted & (distance < success_threshold)
 
         return torch.where(is_lifted,1-torch.tanh(distance/std),0.0)
 
-
-def cube_placed(
-    env:ManagerBasedRLEnv,
-    xy_threshold: float = 0.03,
-    z_threshold: float = 0.01,
+# (4) kostka na stole docelowym 
+def cube_released(
+    env: ManagerBasedRLEnv, 
+    speed_std:float = 0.05,
     open_threshold: float = 0.035,
-    target_offset_z: float = 0.055,
-    robot_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
-    target_cfg : SceneEntityCfg = SceneEntityCfg("target_table"),
-    object_cfg : SceneEntityCfg = SceneEntityCfg("cube_1"),
+    object_cfg :SceneEntityCfg = SceneEntityCfg("cube_1"),
+    ) -> torch.Tensor:
 
-)-> torch.Tensor:
-
-    target: RigidObject = env.scene[target_cfg.name]
     object: RigidObject = env.scene[object_cfg.name]
-    robot: Articulation = env.scene[robot_cfg.name]
+    robot: Articulation = env.scene["robot"]
+    finger_ids, _ = robot.find_joints("panda_finger.*")
+    gripper_open = (robot.data.joint_pos.torch[:, finger_ids] > open_threshold).all(dim=1)
+    released = cube_at_target_pos(env)& gripper_open
 
-    table_pos = target.data.root_pos_w.torch
-    cube_pos = object.data.root_pos_w.torch
+    cube_speed= torch.linalg.norm(object.data.root_lin_vel_w.torch,dim=1)
+    cube_is_still = 1- torch.tanh(cube_speed/speed_std)
 
-    x_y = torch.linalg.norm(cube_pos[:,[0,1]] - table_pos[:,[0,1]],dim = 1) < xy_threshold
-    z = torch.abs(cube_pos[:,2] - (table_pos[:,2]+target_offset_z)) < z_threshold
+
+    return released.float() * cube_is_still
+
+# (5) gdy wszystkie kostki ze sceny są na stole docelowym - powrót do ułożena bazowego 
+def arm_home_return(
+        env:ManagerBasedRLEnv,
+        std: float,
+        open_threshold: float = 0.035,
+        robot_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
+)->torch.Tensor:
+    robot:Articulation = env.scene[robot_cfg.name]
 
     finger_ids, _ = robot.find_joints("panda_finger.*")
-    gripper_open = (robot.data.joint_pos.torch[:, finger_ids]>open_threshold).all(dim=1)
-
-
-    return(x_y & z & gripper_open).float()
-
-def arm_home_after_place(
-    env: ManagerBasedRLEnv,
-    std: float = 1.0,
-    robot_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
-) -> torch.Tensor:
-    robot: Articulation = env.scene[robot_cfg.name]
-
-    placed = cube_placed(env) > 0.5
+    gripper_open = (robot.data.joint_pos.torch[:, finger_ids] > open_threshold).all(dim=1)
+    released = cube_at_target_pos(env) & gripper_open
 
     arm_ids, _ = robot.find_joints("panda_joint.*")
     joint_diff = robot.data.joint_pos.torch[:, arm_ids] - robot.data.default_joint_pos.torch[:, arm_ids]
     distance = torch.linalg.norm(joint_diff, dim=1)
 
-    return torch.where(placed, 1 - torch.tanh(distance / std), 0.0)
+    return torch.where(released, 1 - torch.tanh(distance / std), 0.0)
 
 
-
-def cube_lifted(
+def arm_still_at_home(
     env: ManagerBasedRLEnv,
-    minimal_height: float,
-    object_cfg: SceneEntityCfg = SceneEntityCfg("cube_1"),
+    home_threshold: float = 0.4,
+    speed_std: float = 0.5,
+    open_threshold: float = 0.035,
+    robot_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
 ) -> torch.Tensor:
-    cube: RigidObject = env.scene[object_cfg.name]
-    is_lifted = cube.data.root_pos_w.torch[:, 2] > minimal_height
-    return (is_lifted & cube_under_control(env)).float()
+    robot: Articulation = env.scene[robot_cfg.name]
+
+    finger_ids, _ = robot.find_joints("panda_finger.*")
+    gripper_open = (robot.data.joint_pos.torch[:, finger_ids] > open_threshold).all(dim=1)
+    released = cube_at_target_pos(env) & gripper_open
+
+    arm_ids, _ = robot.find_joints("panda_joint.*")
+    joint_diff = robot.data.joint_pos.torch[:, arm_ids] - robot.data.default_joint_pos.torch[:, arm_ids]
+    at_home = released & (torch.linalg.norm(joint_diff, dim=1) < home_threshold)
+
+    arm_speed = torch.linalg.norm(robot.data.joint_vel.torch[:, arm_ids], dim=1)
+    return torch.where(at_home, 1 - torch.tanh(arm_speed / speed_std), 0.0)
 
 
+
+def open_when_on_target(
+    env: ManagerBasedRLEnv,
+    grasp_width: float = 0.025,   
+    open_width: float = 0.04,     
+    robot_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
+) -> torch.Tensor:
+    robot: Articulation = env.scene[robot_cfg.name]
+
+    finger_ids, _ = robot.find_joints("panda_finger.*")
+    finger = robot.data.joint_pos.torch[:, finger_ids].mean(dim=1)
+
+    
+    opening = torch.clamp((finger - grasp_width) / (open_width - grasp_width), 0.0, 1.0)
+
+    return torch.where(cube_at_target_pos(env), opening, 0.0)

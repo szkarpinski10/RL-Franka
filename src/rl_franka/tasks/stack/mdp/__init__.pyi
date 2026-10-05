@@ -5,14 +5,18 @@
 
 __all__ = [
     # rewards
-    "object_is_lifted",
+    "cube_at_target_pos",
+    "cube_control",
     "object_ee_distance",
+    "reaching_unless_at_target",
+    "object_is_lifted",
+    "cube_is_lifted",
     "object_goal_distance",
-    "cube_target_distance"
-    "cube_placed",
-    "arm_home_after_place",
-    "cube_under_control",
-    "cube_lifted",
+    "cube_target_distance",
+    "cube_released",
+    "arm_home_return",
+    "arm_still_at_home",
+    "open_when_on_target",
 
     # observations
     "ee_frame_pos",
@@ -27,6 +31,6 @@ __all__ = [
 # Forward stable MDP terms lazily, then override with environment-specific terms below.
 from isaaclab.envs.mdp import *  # noqa: F401, F403
 
-from .rewards import  object_is_lifted, object_ee_distance, object_goal_distance,cube_target_distance, cube_placed, arm_home_after_place, cube_under_control, cube_lifted
+from .rewards import  cube_at_target_pos, cube_control, object_ee_distance, reaching_unless_at_target, object_is_lifted, cube_is_lifted, object_goal_distance, cube_target_distance, cube_released, arm_home_return, arm_still_at_home, open_when_on_target
 from .observations import ee_frame_pos, ee_frame_quat, gripper_pos, object_position_in_robot_root_frame
 from .terminations import task_success

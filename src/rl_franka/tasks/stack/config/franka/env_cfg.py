@@ -100,10 +100,10 @@ class StackSceneCfg(InteractiveSceneCfg):
     target_table = RigidObjectCfg(
         prim_path = "{ENV_REGEX_NS}/Target_table",
         init_state = RigidObjectCfg.InitialStateCfg(
-            pos = [0.5,0.3,0.58]
+            pos = [0.45,0.2,0.58]
         ),
         spawn = sim_utils.CuboidCfg(
-            size = (0.15,0.15,0.06),
+            size = (0.05,0.05,0.05),
             rigid_props = RigidBodyPropertiesCfg(kinematic_enabled = True),
             collision_props = sim_utils.CollisionPropertiesCfg(),
             visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.1, 0.4, 0.8)),
@@ -116,7 +116,7 @@ class StackSceneCfg(InteractiveSceneCfg):
     cube_1 = RigidObjectCfg(
         prim_path = "{ENV_REGEX_NS}/Cube_1",
         init_state = RigidObjectCfg.InitialStateCfg(
-            pos = [0.35, -0.15, 0.58],
+            pos = [0.35, -0.2, 0.58],
         ),
         spawn=sim_utils.CuboidCfg(
                 size=(0.05, 0.05, 0.05),
@@ -219,9 +219,6 @@ class ObservationsCfg:
             params = {"object_cfg":SceneEntityCfg("target_table")},
         )
 
-        
-
-        
 
 
         def __post_init__(self) -> None:
@@ -284,27 +281,30 @@ class EventCfg:
 class RewardsCfg:
     """Reward terms for the MDP."""
 
-    reaching_object = RewTerm(func=mdp.object_ee_distance, params={"std": 0.1}, weight=1.0)
+    reaching_object = RewTerm(func=mdp.reaching_unless_at_target, params={"std": 0.1}, weight=1.0)
 
-    lifting_object = RewTerm(func=mdp.cube_lifted, params={"minimal_height": 0.59}, weight=15.0)
+    lifting_object = RewTerm(func=mdp.cube_is_lifted, params={"minimal_height": 0.59}, weight=15.0)
 
     object_goal_tracking = RewTerm(
         func=mdp.cube_target_distance,
-        params={"std": 0.6, "minimal_height": 0.59, "success_threshold": 0.05},
+        params={"std": 0.6, "minimal_height": 0.59, "success_threshold": 0.02},
         weight=16.0,
     )
 
     object_goal_tracking_fine_grained = RewTerm(
         func=mdp.cube_target_distance,
         params={"std": 0.05, "minimal_height": 0.59},
-        weight=5.0,
+        weight=15.0,
     )
 
-    cube_placed = RewTerm(func = mdp.cube_placed, weight = 10.0)
+    cube_released = RewTerm(func=mdp.cube_released, weight=70.0)
+    open_when_on_target = RewTerm(func=mdp.open_when_on_target, weight=20.0)
+
     arm_home = RewTerm(
-        func = mdp.arm_home_after_place, params = {"std": 2.0, }, weight = 10.0
+        func = mdp.arm_home_return, params = {"std": 2.0, }, weight = 10.0
     )
 
+    arm_still_at_home = RewTerm(func=mdp.arm_still_at_home, weight=5.0)
 
 
     # nagordy ujemne za szarpanie 
